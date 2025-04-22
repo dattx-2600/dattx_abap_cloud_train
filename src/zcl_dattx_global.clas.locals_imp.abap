@@ -26,9 +26,11 @@ class lcl_flight definition.
 endclass.
 
 class lcl_flight implementation.
+
   METHOD get_instance.
-    go_instance = COND #( WHEN go_instance IS BOUND THEN go_instance ELSE NEW #( ) ).
-    ro_instance = go_instance.
+      go_instance = COND #( WHEN go_instance IS BOUND THEN go_instance
+                            ELSE NEW #(  ) ).
+      ro_instance = go_instance.
   ENDMETHOD.
 
 
@@ -58,5 +60,54 @@ class lcl_flight implementation.
       rv_exists = abap_false.
     ENDIF.
   ENDMETHOD.
+
+endclass.
+
+class lcl_instance_constructor definition.
+
+        public section.
+        DATA: carrier_id    TYPE /dmo/carrier_id,
+              connection_id TYPE /dmo/connection_id.
+
+        METHODS constructor
+          IMPORTING
+            i_connection_id TYPE /dmo/connection_id
+            i_carrier_id    TYPE /dmo/carrier_id
+          RAISING
+            cx_ABAP_INVALID_VALUE.
+
+        METHODS get_conn_count RETURNING VALUE(rv_count) TYPE i.
+        "Define a class constructor
+        CLASS-METHODS class_constructor.
+
+        protected section.
+        private section.
+        "Define a private attribute.
+        CLASS-DATA: conn_counter TYPE i.
+
+endclass.
+
+class lcl_instance_constructor implementation.
+
+  METHOD constructor.
+
+    IF i_carrier_id IS INITIAL OR i_connection_id IS INITIAL.
+      RAISE EXCEPTION TYPE cx_abap_invalid_value.
+    ENDIF.
+
+    me->connection_id = i_connection_id.
+    me->carrier_id    = i_carrier_id.
+
+    conn_counter = conn_counter + 1.
+
+  ENDMETHOD.
+
+  method get_conn_count.
+    rv_count = conn_counter.
+  endmethod.
+
+  method class_constructor.
+    conn_counter = 0.
+  endmethod.
 
 endclass.

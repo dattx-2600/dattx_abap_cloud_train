@@ -40,11 +40,25 @@ CLASS zcl_dattx_global IMPLEMENTATION.
 
         out->write( |Thông tin chuyến bay: | ).
         out->write( wa_flight ).
-
       CATCH cx_sy_open_sql_db INTO DATA(lx_error).
         out->write( |Lỗi: { lx_error->get_text( ) }| ).
       CATCH cx_root INTO DATA(lx_root).
         out->write( |Lỗi không xác định: { lx_root->get_text( ) }| ).
+    ENDTRY.
+
+    "Use the Constructor
+    DATA: connection TYPE REF TO lcl_instance_constructor.
+    TRY.
+       connection = NEW #(
+                           i_carrier_id    = 'LH'
+                           i_connection_id = '0400'
+                         ).
+        out->write( `New instance created:.` ).
+        out->write( connection ).
+        "Read private attribute from global class.
+        out->write( |connection count: { connection->get_conn_count(  ) } | ).
+    CATCH cx_abap_invalid_value.
+        out->write( `Create new instance failed.` ).
     ENDTRY.
 
   ENDMETHOD.
