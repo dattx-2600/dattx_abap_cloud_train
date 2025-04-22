@@ -19,7 +19,7 @@ CLASS zcl_dattx_global IMPLEMENTATION.
           lv_connection_id TYPE /dmo/flight-connection_id VALUE '0322',
           lv_flight_exists TYPE abap_bool.
 
-
+    "Call functional method
     lv_flight_exists = lcl_flight=>get_instance( )->check_flight_exists(
       i_carrier_id = lv_carrier_id
       i_connection_id = lv_connection_id
@@ -28,8 +28,9 @@ CLASS zcl_dattx_global IMPLEMENTATION.
     IF lv_flight_exists = abap_false.
         out->write( |Không tìm thấy chuyến bay với Carrier ID { lv_carrier_id } và Connection ID { lv_connection_id }.| ).
     ENDIF.
-
+    "Handle exceptions.
     TRY.
+    "Call instance method.
         lcl_flight=>get_instance( )->get_flight(
           EXPORTING
             i_carrier_id = lv_carrier_id

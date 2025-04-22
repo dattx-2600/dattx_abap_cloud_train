@@ -4,13 +4,14 @@
 class lcl_flight definition.
 
   public section.
+  "Define static method.
   CLASS-METHODS get_instance RETURNING VALUE(ro_instance) TYPE REF TO lcl_flight.
-
+  "Define instance method.
   METHODS get_flight IMPORTING i_carrier_id TYPE /dmo/flight-carrier_id
                                i_connection_id TYPE /dmo/flight-connection_id
                      EXPORTING es_flight TYPE /dmo/flight
                     RAISING   cx_sy_open_sql_db.
-
+  "Define a functional method.
   METHODS check_flight_exists
       IMPORTING
         i_carrier_id TYPE /dmo/flight-carrier_id
@@ -21,7 +22,9 @@ class lcl_flight definition.
   CLASS-DATA gv_success TYPE string VALUE 'S'.
   protected section.
   private section.
+  "static private attribute
   CLASS-DATA go_instance TYPE REF TO lcl_flight.
+
 
 endclass.
 
