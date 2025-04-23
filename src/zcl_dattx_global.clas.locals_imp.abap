@@ -19,6 +19,11 @@ class lcl_flight definition.
       RETURNING
         VALUE(rv_exists) TYPE abap_bool.
 
+  "Use CDS View Entity
+  METHODS get_flight_with_cds IMPORTING i_carrier_id TYPE /dmo/flight-carrier_id
+                               i_connection_id TYPE /dmo/flight-connection_id
+                               EXPORTING es_connection TYPE /DMO/I_Connection.
+
   CLASS-DATA gv_success TYPE string VALUE 'S'.
   protected section.
   private section.
@@ -36,7 +41,7 @@ class lcl_flight implementation.
       ro_instance = go_instance.
   ENDMETHOD.
 
-
+"Implementing Basic SELECT Statements
   METHOD get_flight.
 
     IF i_carrier_id IS INITIAL OR i_connection_id IS INITIAL.
@@ -63,6 +68,22 @@ class lcl_flight implementation.
       rv_exists = abap_false.
     ENDIF.
   ENDMETHOD.
+
+  method get_flight_with_cds.
+    IF i_carrier_id IS INITIAL OR i_connection_id IS INITIAL.
+    RAISE EXCEPTION TYPE cx_sy_open_sql_db.
+  ENDIF.
+
+  SELECT SINGLE *
+    FROM /DMO/I_Connection
+    WHERE AirlineID     = @i_carrier_id
+    AND ConnectionID  = @i_connection_id
+    INTO @es_connection.
+
+  IF sy-subrc <> 0.
+    RAISE EXCEPTION TYPE cx_sy_open_sql_db.
+  ENDIF.
+  endmethod.
 
 endclass.
 

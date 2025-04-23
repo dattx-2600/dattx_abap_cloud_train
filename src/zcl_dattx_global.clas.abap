@@ -15,6 +15,7 @@ ENDCLASS.
 CLASS zcl_dattx_global IMPLEMENTATION.
   METHOD if_oo_adt_classrun~main.
     DATA: wa_flight TYPE /dmo/flight,
+          wa_connection TYPE /DMO/I_Connection,
           lv_carrier_id TYPE /dmo/flight-carrier_id VALUE 'AA',
           lv_connection_id TYPE /dmo/flight-connection_id VALUE '0322',
           lv_flight_exists TYPE abap_bool.
@@ -60,6 +61,22 @@ CLASS zcl_dattx_global IMPLEMENTATION.
         out->write( |connection count: { connection->get_conn_count(  ) } | ).
     CATCH cx_abap_invalid_value.
         out->write( `Create new instance failed.` ).
+    ENDTRY.
+
+    "Run method with query using cds view
+    TRY.
+        lcl_flight=>get_instance( )->get_flight_with_cds(
+          EXPORTING
+            i_carrier_id = lv_carrier_id
+            i_connection_id = lv_connection_id
+          IMPORTING
+            es_connection = wa_connection
+        ).
+
+        out->write( |Run method with query using cds view: | ).
+        out->write( wa_connection ).
+    CATCH cx_sy_open_sql_db INTO DATA(lx_error1).
+        out->write( |Lỗi: { lx_error1->get_text( ) }| ).
     ENDTRY.
 
   ENDMETHOD.
