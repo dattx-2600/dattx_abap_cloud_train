@@ -14,8 +14,22 @@ ENDCLASS.
 
 CLASS zcl_dattx_global IMPLEMENTATION.
   METHOD if_oo_adt_classrun~main.
+    TYPES: BEGIN OF ty_connection,
+         airlineid               TYPE /dmo/carrier_id,
+         connectionid            TYPE /dmo/connection_id,
+         departureairport        TYPE /dmo/airport_id,
+         destinationairport      TYPE /dmo/airport_id,
+         airline_id              TYPE /dmo/carrier_id,  " Từ _Airline
+         airline_name            TYPE /dmo/carrier_name,  " Từ _Airline
+         departure_airport_id    TYPE /dmo/airport_id,  " Từ _DepartureAirport
+         departure_airport_name  TYPE /dmo/airport_name,  " Từ _DepartureAirport
+         destination_airport_id  TYPE /dmo/airport_id,  " Từ _DestinationAirport
+         destination_airport_name TYPE /dmo/airport_name,  " Từ _DestinationAirport
+       END OF ty_connection.
+
     DATA: wa_flight TYPE /dmo/flight,
           wa_connection TYPE /DMO/I_Connection,
+          wa_connection1 TYPE ty_connection,
           lv_carrier_id TYPE /dmo/flight-carrier_id VALUE 'AA',
           lv_connection_id TYPE /dmo/flight-connection_id VALUE '0322',
           lv_flight_exists TYPE abap_bool.
@@ -75,6 +89,17 @@ CLASS zcl_dattx_global IMPLEMENTATION.
 
         out->write( |Run method with query using cds view: | ).
         out->write( wa_connection ).
+
+        lcl_flight=>get_instance( )->get_flight_with_cds1(
+          EXPORTING
+            i_carrier_id = lv_carrier_id
+            i_connection_id = lv_connection_id
+          IMPORTING
+            es_connection1 = wa_connection1
+        ).
+
+        out->write( |Run method with query using cds view 1: | ).
+        out->write( wa_connection1 ).
     CATCH cx_sy_open_sql_db INTO DATA(lx_error1).
         out->write( |Lỗi: { lx_error1->get_text( ) }| ).
     ENDTRY.

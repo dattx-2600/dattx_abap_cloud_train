@@ -20,9 +20,29 @@ class lcl_flight definition.
         VALUE(rv_exists) TYPE abap_bool.
 
   "Use CDS View Entity
+TYPES: BEGIN OF ty_connection,
+         airlineid               TYPE /dmo/carrier_id,
+         connectionid            TYPE /dmo/connection_id,
+         departureairport        TYPE /dmo/airport_id,
+         destinationairport      TYPE /dmo/airport_id,
+         airline_id              TYPE /dmo/carrier_id,  " Từ _Airline
+         airline_name            TYPE /dmo/carrier_name,  " Từ _Airline
+         departure_airport_id    TYPE /dmo/airport_id,  " Từ _DepartureAirport
+         departure_airport_name  TYPE /dmo/airport_name,  " Từ _DepartureAirport
+         destination_airport_id  TYPE /dmo/airport_id,  " Từ _DestinationAirport
+         destination_airport_name TYPE /dmo/airport_name,  " Từ _DestinationAirport
+       END OF ty_connection.
+
+  "Use CDS View Entity
   METHODS get_flight_with_cds IMPORTING i_carrier_id TYPE /dmo/flight-carrier_id
                                i_connection_id TYPE /dmo/flight-connection_id
                                EXPORTING es_connection TYPE /DMO/I_Connection.
+
+    METHODS get_flight_with_cds1 IMPORTING i_carrier_id TYPE /dmo/flight-carrier_id
+                               i_connection_id TYPE /dmo/flight-connection_id
+                               EXPORTING es_connection1 TYPE ty_connection.
+
+
 
   CLASS-DATA gv_success TYPE string VALUE 'S'.
   protected section.
@@ -69,7 +89,7 @@ class lcl_flight implementation.
     ENDIF.
   ENDMETHOD.
 
-  method get_flight_with_cds.
+method get_flight_with_cds.
     IF i_carrier_id IS INITIAL OR i_connection_id IS INITIAL.
     RAISE EXCEPTION TYPE cx_sy_open_sql_db.
   ENDIF.
@@ -84,6 +104,29 @@ class lcl_flight implementation.
     RAISE EXCEPTION TYPE cx_sy_open_sql_db.
   ENDIF.
   endmethod.
+
+  METHOD get_flight_with_cds1.
+  IF i_carrier_id IS INITIAL OR i_connection_id IS INITIAL.
+    RAISE EXCEPTION TYPE cx_sy_open_sql_db.
+  ENDIF.
+
+  SELECT SINGLE airlineid,
+                connectionid,
+                departureairport,
+                destinationairport,
+                \_Airline-Name AS airline_name,
+                \_DepartureAirport-AirportID AS departure_airport_id,
+                \_DepartureAirport-Name AS departure_airport_name,
+                \_DestinationAirport-airportid AS destination_airport_id
+    FROM /DMO/I_Connection
+    WHERE airlineid = @i_carrier_id
+    AND connectionid = @i_connection_id
+    INTO CORRESPONDING FIELDS OF @es_connection1.
+
+  IF sy-subrc <> 0.
+    RAISE EXCEPTION TYPE cx_sy_open_sql_db.
+  ENDIF.
+ENDMETHOD.
 
 endclass.
 
