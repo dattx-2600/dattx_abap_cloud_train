@@ -1,0 +1,11 @@
+@EndUserText: {
+  label: 'Service Definition for ZC_ADDATCONNECTION'
+}
+@ObjectModel: {
+  leadingEntity: {
+    name: 'ZC_ADDATCONNECTION'
+  }
+}
+define service ZUI_ADDATCONNECTION_O4 provider contracts odata_v4_ui {
+  expose ZC_ADDATCONNECTION as ZMODEL_CON_DATTX;
+}

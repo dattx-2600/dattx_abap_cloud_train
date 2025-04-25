@@ -1,0 +1,53 @@
+managed implementation in class ZBP_R_ADDATCONNECTION unique;
+strict ( 2 );
+with draft;
+define behavior for ZR_ADDATCONNECTION alias ZMODEL_CON_DATTX
+persistent table ZADDATCONNECTION
+draft table ZADDTCNNECTION_D
+etag master LacalLastChangedAt
+lock master total etag LacalChangedAt
+authorization master( global )
+
+{
+  field ( readonly )
+   Uuid,
+   LacalCreatedBy,
+   LacalCreatedAt,
+   LacalLastChangedBy,
+   LacalLastChangedAt,
+   LacalChangedAt;
+
+  field ( numbering : managed )
+   Uuid;
+
+
+  create;
+  update;
+  delete;
+
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Edit;
+  draft action Resume;
+  draft determine action Prepare;
+
+  mapping for ZADDATCONNECTION
+  {
+    Uuid = uuid;
+    Carried = carried;
+    Connid = connid;
+    AirportFrom = airport_from;
+    CityFrom = city_from;
+    CountryFrom = country_from;
+    AirportTo = airport_to;
+    CityTo = city_to;
+    CountryTo = country_to;
+    LacalCreatedBy = lacal_created_by;
+    LacalCreatedAt = lacal_created_at;
+    LacalLastChangedBy = lacal_last_changed_by;
+    LacalLastChangedAt = lacal_last_changed_at;
+    LacalChangedAt = lacal_changed_at;
+  }
+
+  validation checkSemanticKey on save { create; update; }
+}
