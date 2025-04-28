@@ -13,17 +13,7 @@ annotate view ZC_ADDATCONNECTION with
     position: 10 , 
     type: #IDENTIFICATION_REFERENCE
   } ]
-  @UI.identification: [ {
-    position: 10 , 
-    label: 'Uuid'
-  } ]
-  @UI.lineItem: [ {
-    position: 10 , 
-    label: 'Uuid'
-  } ]
-  @UI.selectionField: [ {
-    position: 10 
-  } ]
+ @UI.hidden: true
   Uuid;
   
   @UI.identification: [ {
@@ -35,6 +25,7 @@ annotate view ZC_ADDATCONNECTION with
   @UI.selectionField: [ {
     position: 20 
   } ]
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZIDAT_Carrier', element: 'AirlineID' } }]
   Carried;
   
   @UI.identification: [ {
@@ -82,7 +73,7 @@ annotate view ZC_ADDATCONNECTION with
   CountryFrom;
   
   @UI.identification: [ {
-    position: 70 
+    position: 40
   } ]
   @UI.lineItem: [ {
     position: 70 
@@ -93,7 +84,7 @@ annotate view ZC_ADDATCONNECTION with
   AirportTo;
   
   @UI.identification: [ {
-    position: 80 
+    position: 60 
   } ]
   @UI.lineItem: [ {
     position: 80 
@@ -104,7 +95,7 @@ annotate view ZC_ADDATCONNECTION with
   CityTo;
   
   @UI.identification: [ {
-    position: 90 
+    position: 80 
   } ]
   @UI.lineItem: [ {
     position: 90 
@@ -114,58 +105,18 @@ annotate view ZC_ADDATCONNECTION with
   } ]
   CountryTo;
   
-  @UI.identification: [ {
-    position: 100 
-  } ]
-  @UI.lineItem: [ {
-    position: 100 
-  } ]
-  @UI.selectionField: [ {
-    position: 100 
-  } ]
+ @UI.hidden: true
   LacalCreatedBy;
   
-  @UI.identification: [ {
-    position: 110 
-  } ]
-  @UI.lineItem: [ {
-    position: 110 
-  } ]
-  @UI.selectionField: [ {
-    position: 110 
-  } ]
+ @UI.hidden: true
   LacalCreatedAt;
   
-  @UI.identification: [ {
-    position: 120 
-  } ]
-  @UI.lineItem: [ {
-    position: 120 
-  } ]
-  @UI.selectionField: [ {
-    position: 120 
-  } ]
+ @UI.hidden: true
   LacalLastChangedBy;
   
-  @UI.identification: [ {
-    position: 130 
-  } ]
-  @UI.lineItem: [ {
-    position: 130 
-  } ]
-  @UI.selectionField: [ {
-    position: 130 
-  } ]
+ @UI.hidden: true
   LacalLastChangedAt;
   
-  @UI.identification: [ {
-    position: 140 
-  } ]
-  @UI.lineItem: [ {
-    position: 140 
-  } ]
-  @UI.selectionField: [ {
-    position: 140 
-  } ]
+ @UI.hidden: true
   LacalChangedAt;
 }
