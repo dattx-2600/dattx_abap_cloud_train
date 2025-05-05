@@ -116,7 +116,7 @@ CLASS zcl_dattx_global IMPLEMENTATION.
     var_int = var_string.
 
 
-    out->write( 'Conversion successful' ).
+    out->write( TEXT-001 ).
 
 
     var_string = `20230101`.
