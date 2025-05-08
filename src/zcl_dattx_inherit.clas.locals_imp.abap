@@ -115,3 +115,39 @@ rt_Attributes = value #( base rt_attributes ( name = 'SEATS' value = seats ) ).
 ENDMETHOD.
 
 ENDCLASS.
+
+CLASS lcl_flight DEFINITION.
+
+  PUBLIC SECTION.
+    DATA: carrier_id TYPE /dmo/carrier_id,
+          connection_id TYPE /dmo/connection_id,
+          flight_date TYPE /dmo/flight_date.
+
+    METHODS: get_description RETURNING VALUE(r_result) TYPE string.
+ENDCLASS.
+
+CLASS lcl_flight IMPLEMENTATION.
+  METHOD get_description.
+    r_result = |Flight { carrier_id } { connection_id } on { flight_date DATE = USER }|.
+  ENDMETHOD.
+ENDCLASS.
+
+CLASS lcl_domestic_flight DEFINITION
+  INHERITING FROM lcl_flight.
+
+  PUBLIC SECTION.
+    DATA: airport_from TYPE /dmo/airport_from_id,
+          airport_to   TYPE /dmo/airport_to_id.
+
+    METHODS: get_description REDEFINITION. " Ghi đè phương thức của superclass
+ENDCLASS.
+
+CLASS lcl_domestic_flight IMPLEMENTATION.
+  METHOD get_description.
+    " Gọi phương thức của superclass
+    DATA(super_description) = super->get_description( ).
+
+    " Mở rộng mô tả với thông tin sân bay
+    r_result = |{ super_description } from { airport_from } to { airport_to }|.
+  ENDMETHOD.
+ENDCLASS.
